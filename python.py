@@ -93,6 +93,9 @@ def preprocessing(df):
     df.drop(columns=['Month_Num', 'Quarter_Num'], inplace=True)
     df.drop(columns=['Airports'], inplace=True)
 
+    #Local flights are not revelant for this project 
+    df.drop(columns=['LocalFlights_2'], inplace=True)
+
     # List of columns to move and the column after which to insert them
     cols_to_move = ['Month', 'Year', 'Airport']
     insert_after = 'Periods'
