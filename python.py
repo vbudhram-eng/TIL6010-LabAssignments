@@ -43,7 +43,7 @@ def preprocessing(df):
 
     #Filter data, so that we work only with Passengers and only for years above 2015(excluding) 2020
     df = df.iloc[:, :43]
-    df = df[ (df['Periods'].str[:4].astype(int) >= 2015) & (df['Periods'].str[:4].astype(int) != 2020)] #add only dates post 2015
+    df = df[ (df['Periods'].str[:4].astype(int) >= 2015)] #add only dates post 2015
 
     # Function to extract year, month, and quarter from the Periods column
     def extract_date(period):
@@ -122,3 +122,22 @@ df_processesd = preprocessing(df_raw)
 # Display the updated DataFrame
 print(df_processesd.head(20))
 print(df_processesd.count())
+
+
+def remove_quarters_year (df_processesd):
+    quarters = ["Q1","Q2","Q3","Q4"]
+
+    # Filter the dataframe to include only rows where 'Months' is in the list of months
+    filtered_df = df_processesd[df_processesd['Month'].isin(quarters)]
+
+    filtered_df['Quarter_Year'] = '(' + filtered_df['Month'] + ', ' + filtered_df['Year'] + ')'
+    
+    return filtered_df
+
+data_for_animation = remove_quarters_year(df_processesd)
+
+fig = px.bar(data_for_animation, x='Airport', y='TotalFlights_3', animation_frame="Quarter_Year", color="Airport", hover_name="Airport", range_y=[0,350000])
+
+fig.show()
+
+df_processesd.head()
